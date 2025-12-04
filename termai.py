@@ -69,7 +69,7 @@ def load_config():
 
     # 3. First Run Setup
     if not api_key:
-        print(f"[{APP_NAME}] First run! Enter your Gemini API Key.")
+        print(f"[{APP_NAME}] First run! Enter your Gemini API Key. Get the API key from aistudio.google.com")
         api_key = input("API Key: ").strip()
         if not api_key:
             print("Error: Key cannot be empty.")

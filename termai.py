@@ -29,7 +29,7 @@ DEFAULT_CONFIG = {
     "gemini_config": {
         "api_key": "",
         "model_name": "gemini-2.5-flash",
-        "system_instruction": "You are a helpful CLI assistant.",
+        "system_instruction": "You are a CLI assistant for command-line users.",
         "generation_config": {
             "temperature": 0.7,
             "top_p": 0.9,

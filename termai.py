@@ -101,28 +101,39 @@ def load_config():
         OLD_KEY_FILE.rename(backup_file)
         
     # 3. First Run Setup
-    if not gemini_api_key:
-        if sys.stdin.isatty(): # Only prompt if interactive
-            print(f"[{APP_NAME}] First run! Enter your Gemini API Key. Get it from aistudio.google.com")
-            gemini_api_key = input("Gemini API Key: ").strip()
-            if not gemini_api_key:
-                print("Error: Gemini key cannot be empty.")
-                sys.exit(1)
-        else:
-            return None
-    
-    # Prompt for OpenAI key (optional)
-    openai_api_key = ""
-    if sys.stdin.isatty():
-        print(f"[{APP_NAME}] (Optional) Enter your OpenAI API Key. Get it from platform.openai.com")
-        openai_api_key = input("OpenAI API Key (press Enter to skip): ").strip()
-
-    # 4. Create new Config Dictionary
     new_config = DEFAULT_CONFIG.copy()
-    new_config["gemini_config"]["api_key"] = gemini_api_key
-    new_config["openai_config"]["api_key"] = openai_api_key
-    
-    # Save it
+    if sys.stdin.isatty():
+        print(f"[{APP_NAME}] First run! Choose your primary AI provider.")
+        provider = ""
+        while provider not in ["1", "2"]:
+            provider = input("Enter 1 for Gemini or 2 for OpenAI: ").strip()
+
+        if provider == "1":
+            new_config["provider"] = "gemini"
+            if not gemini_api_key:
+                print(f"[{APP_NAME}] Enter your Gemini API Key. Get it from aistudio.google.com")
+                gemini_api_key = input("Gemini API Key: ").strip()
+                if not gemini_api_key:
+                    print("Error: Gemini key cannot be empty.")
+                    sys.exit(1)
+            new_config["gemini_config"]["api_key"] = gemini_api_key
+        
+        elif provider == "2":
+            new_config["provider"] = "openai"
+            print(f"[{APP_NAME}] Enter your OpenAI API Key. Get it from platform.openai.com")
+            openai_api_key = input("OpenAI API Key: ").strip()
+            if not openai_api_key:
+                print("Error: OpenAI key cannot be empty.")
+                sys.exit(1)
+            new_config["openai_config"]["api_key"] = openai_api_key
+    else:
+        # Default to Gemini if non-interactive and no config exists
+        # This part might need adjustment based on desired non-interactive behavior
+        if not gemini_api_key:
+             return None # Cannot proceed without an API key
+        new_config["gemini_config"]["api_key"] = gemini_api_key
+
+    # Save the new configuration
     with open(CONFIG_FILE, "w") as f:
         json.dump(new_config, f, indent=4)
     
@@ -176,6 +187,7 @@ def print_help():
     print(f"  {CYAN}--config{RESET}      Open configuration file (Edit API key, Model, Proxy, Prompts)")
     print(f"  {CYAN}--debug{RESET}       Enable debug mode (Show raw status codes and errors)")
     print(f"  {CYAN}--help, -h{RESET}    Show this help message")
+    print(f"  {CYAN}--reinstall{RESET}  Re-run the first-time setup to configure API keys")
     
     print(f"\n{YELLOW}Examples:{RESET}")
     print(f"  ai \"How do I unzip a tar file?\"")
@@ -309,14 +321,28 @@ def send_openai_request(config, user_input, debug_mode):
 
 
 def cli_entry_point():
+    # Handle --reinstall flag first, as it affects config loading
+    if "--reinstall" in sys.argv:
+        if CONFIG_FILE.exists():
+            print(f"[{APP_NAME}] Deleting existing config for reinstall...")
+            CONFIG_FILE.unlink()
+        else:
+            print(f"[{APP_NAME}] No existing config found. Starting first-time setup...")
+    
     # 0. Load Configuration (Variables System)
     config = load_config()
+    
+    # If --reinstall was just run, config will be loaded/created.
+    # If the user exits the setup, config might be None.
+    if "--reinstall" in sys.argv:
+        print(f"[{APP_NAME}] Reinstall complete.")
+        return 0
 
     # If config could not be loaded and it's not interactive, exit with error
     if config is None and not sys.stdin.isatty():
         return 1
-
-    # 1. Handle Flags
+    
+    # 1. Handle other Flags
     if "--help" in sys.argv or "-h" in sys.argv:
         return print_help()
 

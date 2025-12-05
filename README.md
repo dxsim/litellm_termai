@@ -113,6 +113,13 @@ The configuration file looks like this:
 ai --help
 ```
 
+**Re-configure API Keys:**
+
+To reset and re-enter your API keys, use the `--reinstall` flag.
+```bash
+ai --reinstall
+```
+
 **Debug Mode:**
 
 If the AI isn't responding or you are getting errors, run:
@@ -124,11 +131,12 @@ This will print the raw server response and error codes.
 ## 🗑 Uninstallation
 To remove Termai completely:
 ```bash
-# Remove the binary
+# Remove the 'ai' command
 rm $PREFIX/bin/ai
 
-# Remove the source files and config
+# Remove the program and configuration files
 rm -rf ~/.programs/termai
+rm -rf ~/.local/share/termai
 ```
 
 ## 3 📄 License

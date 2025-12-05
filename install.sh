@@ -14,14 +14,8 @@ RESET="\033[0m"
 
 echo -e "${BLUE}[+] Starting Termai Installer...${RESET}"
 
-# 1. Check for Termux environment
-if [ -z "$PREFIX" ]; then
-    echo "Warning: This script is designed for Termux. Proceeding anyway..."
-fi
-
-# 2. Install Dependencies
+# 1. Install Dependencies
 echo -e "${YELLOW}[*] Installing dependencies (python, requests)...${RESET}"
-pkg install python -y &> /dev/null
 
 # Check if requests is installed before trying to install it
 if ! pip show requests &> /dev/null; then
@@ -31,7 +25,7 @@ else
     echo "    'requests' is already installed."
 fi
 
-# 3. Create Hidden Program Directory
+# 2. Create Hidden Program Directory
 echo -e "${YELLOW}[*] Creating installation directory: $INSTALL_DIR${RESET}"
 mkdir -p "$INSTALL_DIR"
 

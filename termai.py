@@ -29,12 +29,7 @@ DEFAULT_CONFIG = {
     "gemini_config": {
         "api_key": "",
         "model_name": "gemini-2.5-flash",
-        "system_instruction": (
-            "You are a CLI assistant specific to Termux. "
-            "Do NOT use Markdown. Do NOT use backticks. "
-            "Do NOT use bolding. Just write plain text. "
-            "Keep answers concise."
-        ),
+        "system_instruction": "You are a helpful CLI assistant.",
         "generation_config": {
             "temperature": 0.7,
             "top_p": 0.9,
@@ -173,8 +168,8 @@ def open_editor():
 
 def print_help():
     """Prints the help menu with available commands."""
-    print(f"\n{GREEN}Termai - Termux AI Assistant{RESET}")
-    print(f"A lightweight CLI tool for Gemini AI integration in Termux.\n")
+    print(f"\n{GREEN}Termai - A CLI AI Assistant{RESET}")
+    print(f"A lightweight CLI tool for AI integration in your terminal.\n")
     
     print(f"{YELLOW}Usage:{RESET}")
     print(f"  ai [OPTIONS] \"YOUR QUERY\"")

@@ -40,7 +40,7 @@ DEFAULT_CONFIG = {
     "openai_config": {
         "api_key": "",
         "model_name": "gpt-4o",
-        "system_instruction": "You are a helpful assistant.",
+        "system_instruction": "You are a CLI assistant for command-line users. Do NOT use Markdown. Do NOT use backticks. Do NOT use bolding. Just write plain text. Keep answers concise.",
         "temperature": 0.7,
         "max_tokens": 1024
     }

@@ -124,6 +124,9 @@ def load_config():
                 print("Error: OpenAI key cannot be empty.")
                 sys.exit(1)
             new_config["openai_config"]["api_key"] = openai_api_key
+        base_url = input("Base URL (press Enter for default http://0.0.0.0:4000): ").strip()
+        if base_url:
+            new_config["openai_config"]["base_url"] = base_url
     else:
         # Default to Gemini if non-interactive and no config exists
         # This part might need adjustment based on desired non-interactive behavior
@@ -157,7 +160,7 @@ def open_editor():
     
     # 3. Add in 'micro' search
     if not editor and shutil.which('micro'):
-        editor = 'vim'
+        editor = 'micro'
         
     # 4. If still no editor, fall back to 'nano'
     if not editor:

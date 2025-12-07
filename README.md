@@ -14,13 +14,14 @@ It brings the power of Large Language Models (LLMs) directly to your command lin
 Open Termux and run the following commands:
 ```bash
 # 1. Clone the repository
-git clone https://github.com/estiaksoyeb/termai
+git clone https://github.com/dxsim/litellm_termai
 
 # 2. Enter the directory
 cd termai
 
 # 3. Run the installer
-bash install.sh
+chmod +x install.sh
+./install.sh
 ```
 
 **What the installer does:**
@@ -76,6 +77,7 @@ The configuration file looks like this:
 {
     "provider": "gemini",
     "proxy": "http://user:pass@127.0.0.1:1080",
+    "base_url": "https://litellm_url:4000",
     "gemini_config": {
         "api_key": "YOUR_GEMINI_KEY",
         "model_name": "gemini-2.5-flash",

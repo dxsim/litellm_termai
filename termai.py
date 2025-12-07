@@ -270,7 +270,8 @@ def send_openai_request(config, user_input, debug_mode):
     if debug_mode: print(f"[Debug] Provider: OpenAI | Model: {model_name} | Temp: {temperature} | Proxy: {proxy if proxy else 'None'}")
     try:
         proxies = {"http": proxy, "https": proxy} if proxy else None
-        response = requests.post(api_url, headers=headers, json=payload, proxies=proxies)
+        response = requests.post(api_url, headers=headers, json=payload)
+        
         if debug_mode:
             print(f"[Debug] Status: {response.status_code}")
         if response.status_code != 200:

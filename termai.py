@@ -39,6 +39,7 @@ DEFAULT_CONFIG = {
     },
     "openai_config": {
         "api_key": "",
+        "base_url": "http://0.0.0.0:4000",
         "model_name": "gpt-4o",
         "system_instruction": "You are a CLI assistant for command-line users. Do NOT use Markdown. Do NOT use backticks. Do NOT use bolding. Just write plain text. Keep answers concise.",
         "temperature": 0.7,
@@ -154,7 +155,11 @@ def open_editor():
     if not editor and shutil.which('vim'):
         editor = 'vim'
     
-    # 3. If still no editor, fall back to 'nano'
+    # 3. Add in 'micro' search
+    if not editor and shutil.which('micro'):
+        editor = 'vim'
+        
+    # 4. If still no editor, fall back to 'nano'
     if not editor:
         editor = 'nano'
 
@@ -239,12 +244,13 @@ def send_openai_request(config, user_input, debug_mode):
     # ... (existing code for send_openai_request)
     openai_config = config.get("openai_config", {})
     api_key = openai_config.get("api_key")
+    base_url = openai_config.get("base_url", "http://0.0.0.0:4000")
     model_name = openai_config.get("model_name", "gpt-4o")
     system_instr = openai_config.get("system_instruction", "")
     temperature = openai_config.get("temperature", 0.7)
     max_tokens = openai_config.get("max_tokens", 1024)
     proxy = config.get("proxy", "")
-    api_url = "https://api.openai.com/v1/chat/completions"
+    api_url = f"{base_url}/chat/completions"
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {api_key}"
